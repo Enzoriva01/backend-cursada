@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Cursada Data Analyst</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --purple: #a855f7;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    .container { max-width: 850px; margin: 0 auto; }
+
+    header {
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    h1 { color: var(--accent); font-size: 1.4rem; font-weight: 700; }
+    p.subtitle { color: var(--text-muted); font-size: 0.85rem; }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 18px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .mod-summary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .mod-summary-card.is-finished {
+      border-color: var(--success);
+      background-color: rgba(16, 185, 129, 0.08);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+    }
+
+    .mod-summary-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .mod-badge-finished {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .mod-badge-ongoing {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .mini-progress-bg {
+      background: var(--border);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .mini-progress-fill {
+      background: var(--accent);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .is-finished .mini-progress-fill {
+      background: var(--success);
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 110px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .stat-val { font-size: 1.2rem; font-weight: 700; }
+    .stat-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+
+    .month-picker {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+
+    .month-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .month-btn.active {
+      background-color: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+    }
+
+    .class-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      transition: all 0.2s ease;
+    }
+
+    .class-card.status-vivo {
+      border-left: 4px solid var(--success);
+      background-color: rgba(16, 185, 129, 0.08);
+    }
+
+    .class-card.status-grabada {
+      border-left: 4px solid var(--purple);
+      background-color: rgba(168, 85, 247, 0.08);
+    }
+
+    .class-info { flex: 1; min-width: 200px; }
+
+    .class-title { font-size: 0.92rem; font-weight: 700; }
+    .class-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .tag-cruce {
+      display: block;
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid var(--warning);
+      font-size: 0.73rem;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .status-select {
+      background-color: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .status-select.sel-vivo { color: var(--success); border-color: var(--success); }
+    .status-select.sel-grabada { color: var(--purple); border-color: var(--purple); }
+    
+.info-corta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+  </style>
+  
+
+  <script>
+    const API_URL = 'https://backend-cursada.onrender.com/api';
+
+    window.currentMonth = 'ene';
+
+    window.modulesData = [
+      { id: 'm1', title: '01. Intro a Bases de Datos y SQL', info:'🗓️ 21 OCT 2026 → 18 NOV 2026 |⏰ Mie y Vie (19:30 - 21:30hs)', classes: ['c_oct_1', 'c_oct_2', 'c_oct_3', 'c_oct_4', 'c_nov_1', 'c_nov_2', 'c_nov_3', 'c_nov_4', 'c_nov_5'] },
+      { id: 'm2', title: '02. IA y Productividad', info :'🗓️ 25 NOV 2026 → 28 DIC 2026 | ⏰ Lun y Mie (19:30 - 21:30hs)', classes: ['c_nov_6', 'c_nov_7', 'c_dic_1', 'c_dic_2', 'c_dic_3', 'c_dic_4', 'c_dic_5', 'c_dic_6', 'c_dic_7', 'c_dic_8'] },      
+      { id: 'm3', title: '03. SQL Server Programming' , info: '🗓️ 29 DIC 2026 ➔ 28 ENE 2027 | ⏰ Mar y Jue (20:00 - 22:00 hs)', classes: ['c_dic_9', 'c_ene_1', 'c_ene_2', 'c_ene_3', 'c_ene_4', 'c_ene_5', 'c_ene_7', 'c_ene_10', 'c_feb_3'] },
+      { id: 'm4', title: '04. Análisis y Diseño SQL', info: '🗓️ 26 ENE 2027 ➔ 11 FEB 2027 | ⏰ Mar y Jue (19:30 - 21:00 hs)',  classes: ['c_ene_6', 'c_ene_9', 'c_feb_2', 'c_feb_5', 'c_feb_7', 'c_feb_8'] },
+      { id: 'm5', title: '05. Data Analytics & Visualization', info: '🗓️ 27 ENE 2027 ➔ 15 FEB 2027 | ⏰ Lun y Mié (20:00 - 22:00 hs)', classes: ['c_ene_8', 'c_feb_1', 'c_feb_4', 'c_feb_6'] },
+      { id: 'm6', title: '06. Power BI', info: '🗓️ 29 MAR 2027 ➔ 03 MAY 2027 | ⏰ Lun y Jue (20:00 - 22:00 hs)', classes: ['c_abr_1', 'c_abr_2', 'c_abr_5'] },
+      { id: 'm7', title: '07. Storytelling', info: '🗓️ 20 ABR 2027 ➔ 29 ABR 2027 | ⏰ Mar y Jue (19:30 - 21:00 hs)', classes: ['c_abr_3', 'c_abr_4'] }
+    ];
+
+    window.classesData = {
+      'oct': [
+        { id: 'c_oct_1', title: '01. Intro SQL - Clase 1', date: 'Miércoles 21 Octubre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_oct_2', title: '01. Intro SQL - Clase 2', date: 'Viernes 23 Octubre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_oct_3', title: '01. Intro SQL - Clase 3', date: 'Miércoles 28 Octubre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_oct_4', title: '01. Intro SQL - Clase 4', date: 'Viernes 30 Octubre 2026', time: '19:30 a 21:30 hs', cruce: false }
+      ],
+      'nov': [
+        { id: 'c_nov_1', title: '01. Intro SQL - Clase 5', date: 'Miércoles 04 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_nov_2', title: '01. Intro SQL - Clase 6', date: 'Viernes 06 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_nov_3', title: '01. Intro SQL - Clase 7', date: 'Miércoles 11 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_nov_4', title: '01. Intro SQL - Clase 8', date: 'Viernes 13 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_nov_5', title: '01. Intro SQL - Clase 9 (Final)', date: 'Miércoles 18 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_nov_6', title: '02. IA & Productividad - Clase 1', date: 'Miércoles 25 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_nov_7', title: '02. IA & Productividad - Clase 2', date: 'Lunes 30 Noviembre 2026', time: '19:30 a 21:30 hs', cruce: false }
+      ],
+      'dic': [
+        { id: 'c_dic_1', title: '02. IA & Productividad - Clase 3', date: 'Miércoles 02 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_2', title: '02. IA & Productividad - Clase 4', date: 'Lunes 07 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_3', title: '02. IA & Productividad - Clase 5', date: 'Miércoles 09 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_4', title: '02. IA & Productividad - Clase 6', date: 'Lunes 14 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_5', title: '02. IA & Productividad - Clase 7', date: 'Miércoles 16 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_6', title: '02. IA & Productividad - Clase 8', date: 'Lunes 21 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_7', title: '02. IA & Productividad - Clase 9', date: 'Miércoles 23 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_8', title: '02. IA & Productividad - Clase 10 (Final)', date: 'Lunes 28 Diciembre 2026', time: '19:30 a 21:30 hs', cruce: false },
+        { id: 'c_dic_9', title: '03. SQL Programming - Clase 1', date: 'Martes 29 Diciembre 2026', time: '20:00 a 22:00 hs', cruce: false }
+      ],
+      'ene': [
+        { id: 'c_ene_1', title: '03. SQL Programming - Clase 2', date: 'Jueves 07 Enero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_ene_2', title: '03. SQL Programming - Clase 3', date: 'Martes 12 Enero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_ene_3', title: '03. SQL Programming - Clase 4', date: 'Jueves 14 Enero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_ene_4', title: '03. SQL Programming - Clase 5', date: 'Martes 19 Enero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_ene_5', title: '03. SQL Programming - Clase 6', date: 'Jueves 21 Enero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_ene_6', title: '04. Análisis SQL - Clase 1', date: 'Martes 26 Enero 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 03. SQL Programming (20:00 a 22:00 hs)' },
+        { id: 'c_ene_7', title: '03. SQL Programming - Clase 7', date: 'Martes 26 Enero 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 04. Análisis SQL (19:30 a 21:00 hs)' },
+        { id: 'c_ene_8', title: '05. Data Analytics - Clase 1', date: 'Miércoles 27 Enero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_ene_9', title: '04. Análisis SQL - Clase 2', date: 'Jueves 28 Enero 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 03. SQL Programming (20:00 a 22:00 hs)' },
+        { id: 'c_ene_10', title: '03. SQL Programming - Clase 8', date: 'Jueves 28 Enero 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 04. Análisis SQL (19:30 a 21:00 hs)' }
+      ],
+      'feb': [
+        { id: 'c_feb_1', title: '05. Data Analytics - Clase 2', date: 'Lunes 01 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_2', title: '04. Análisis SQL - Clase 3', date: 'Martes 02 Febrero 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Último cruce (20 a 21 hs) con 03. SQL Programming (20:00 a 22:00 hs)' },
+        { id: 'c_feb_3', title: '03. SQL Programming - Clase 9 (Final)', date: 'Martes 02 Febrero 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Último cruce (20 a 21 hs) con 04. Análisis SQL (19:30 a 21:00 hs)' },
+        { id: 'c_feb_4', title: '05. Data Analytics - Clase 3', date: 'Miércoles 03 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_5', title: '04. Análisis SQL - Clase 4', date: 'Jueves 04 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_feb_6', title: '05. Data Analytics - Clase 4 (Final)', date: 'Lunes 08 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_7', title: '04. Análisis SQL - Clase 5', date: 'Martes 09 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_feb_8', title: '04. Análisis SQL - Clase 6 (Final)', date: 'Martes 23 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false }
+      ],
+      'abr': [
+        { id: 'c_abr_1', title: '06. Power BI - Clase 1', date: 'Jueves 08 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_abr_2', title: '06. Power BI - Clase 2', date: 'Lunes 12 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_abr_3', title: '07. Storytelling - Clase 1', date: 'Martes 20 Abril 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_abr_4', title: '07. Storytelling - Clase 2 (Final)', date: 'Jueves 22 Abril 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 06. Power BI (20:00 a 22:00 hs)' },
+        { id: 'c_abr_5', title: '06. Power BI - Clase 3 (Final)', date: 'Jueves 22 Abril 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 07. Storytelling (19:30 a 21:00 hs)' }
+      ]
+    };
+
+    window.changeStatus = async function(classId, val) {
+      try { localStorage.setItem(classId, val); } catch(e){}
+      window.renderClasses();
+      window.updateStatsAndModules();
+
+      try {
+        await fetch(`${API_URL}/guardar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_clase: classId, estado: val })
+        });
+      } catch (err) {
+        console.error('Error guardando en MySQL:', err);
+      }
+    };
+
+    async function cargarEstadosDesdeMySQL() {
+      try {
+        const res = await fetch(`${API_URL}/estados`);
+        if (res.ok) {
+          const data = await res.json();
+          data.forEach(item => {
+            try { localStorage.setItem(item.id_clase, item.estado); } catch(e){}
+          });
+          window.renderClasses();
+          window.updateStatsAndModules();
+        }
+      } catch (err) {
+        console.error('Servidor offline, utilizando memoria local.', err);
+      }
+    }
+
+    window.updateStatsAndModules = function() {
+      let countVivo = 0;
+      let countGrabada = 0;
+      let countPendiente = 0;
+
+      Object.keys(window.classesData).forEach(m => {
+        window.classesData[m].forEach(c => {
+          let st = 'pendiente';
+          try { st = localStorage.getItem(c.id) || 'pendiente'; } catch(e){}
+          if (st === 'vivo') countVivo++;
+          else if (st === 'grabada') countGrabada++;
+          else countPendiente++;
+        });
+      });
+
+      document.getElementById('st_vivo').innerText = countVivo;
+      document.getElementById('st_grabada').innerText = countGrabada;
+      document.getElementById('st_pend').innerText = countPendiente;
+
+      const modContainer = document.getElementById('modules_summary');
+      if (!modContainer) return;
+
+      let modHtml = window.modulesData.map(mod => {
+        let completed = 0;
+        mod.classes.forEach(cId => {
+          let st = 'pendiente';
+          try { st = localStorage.getItem(cId) || 'pendiente'; } catch(e){}
+          if (st === 'vivo' || st === 'grabada') completed++;
+        });
+
+        const isDone = completed === mod.classes.length;
+        const pct = Math.round((completed / mod.classes.length) * 100);
+
+        let badgeHtml = isDone 
+          ? `<div class="mod-badge-finished">🏆 MATERIA FINALIZADA</div>`
+          : `<span class="mod-badge-ongoing">${completed}/${mod.classes.length} clases (${pct}%)</span>`;
+
+        return `
+          <div class="mod-summary-card ${isDone ? 'is-finished' : ''}">
+            <div class="mod-summary-title">${mod.title}</div>
+            <div class="info-corta">${mod.info}</div>
+            <div>${badgeHtml}</div>
+            <div class="mini-progress-bg">
+              <div class="mini-progress-fill" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      modContainer.innerHTML = modHtml;
+    };
+
+    window.selectMonth = function(m) {
+      window.currentMonth = m;
+      window.renderPicker();
+      window.renderClasses();
+    };
+
+    window.renderPicker = function() {
+      const p = document.getElementById('picker');
+      if (!p) return;
+      p.innerHTML = '';
+      const months = [
+        { id: 'oct', label: 'Octubre 2026' },
+        { id: 'nov', label: 'Noviembre 2026' },
+        { id: 'dic', label: 'Diciembre 2026' },
+        { id: 'ene', label: 'Enero 2027' },
+        { id: 'feb', label: 'Febrero 2027' },
+        { id: 'abr', label: 'Abril/Mayo 2027' }
+      ];
+
+      months.forEach(m => {
+        const btn = document.createElement('button');
+        btn.className = 'month-btn ' + (m.id === window.currentMonth ? 'active' : '');
+        btn.innerText = m.label;
+        btn.onclick = () => window.selectMonth(m.id);
+        p.appendChild(btn);
+      });
+    };
+
+    window.renderClasses = function() {
+      const list = window.classesData[window.currentMonth] || [];
+      const display = document.getElementById('display');
+      if (!display) return;
+
+      let html = list.map(c => {
+        let st = 'pendiente';
+        try { st = localStorage.getItem(c.id) || 'pendiente'; } catch(e){}
+
+        let statusClass = '';
+        if (st === 'vivo') statusClass = 'status-vivo';
+        if (st === 'grabada') statusClass = 'status-grabada';
+
+        let cruceHtml = c.cruce ? `<div class="tag-cruce">${c.cruce}</div>` : '';
+
+        return `
+          <div class="class-card ${statusClass}">
+            <div class="class-info">
+              <div class="class-title">${c.title}</div>
+              <div class="class-sub">📅 ${c.date} | ⏰ ${c.time}</div>
+              ${cruceHtml}
+            </div>
+            <div>
+              <select class="status-select ${st === 'vivo' ? 'sel-vivo' : (st === 'grabada' ? 'sel-grabada' : '')}" onchange="window.changeStatus('${c.id}', this.value)">
+                <option value="pendiente" ${st === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                <option value="vivo" ${st === 'vivo' ? 'selected' : ''}>🔴 En vivo</option>
+                <option value="grabada" ${st === 'grabada' ? 'selected' : ''}>📹 Grabada</option>
+              </select>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      display.innerHTML = html;
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      window.renderPicker();
+      window.renderClasses();
+      cargarEstadosDesdeMySQL();
+    });
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Control de Cursada // Data Analyst</h1>
+      <p class="subtitle">Gestión de asistencia por clase y estado de finalización por materia</p>
+    </header>
+
+    <div class="stats-bar">
+      <div class="stat-box">
+        <div class="stat-val" id="st_vivo" style="color: var(--success)">0</div>
+        <div class="stat-lbl">En Vivo</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="st_grabada" style="color: var(--purple)">0</div>
+        <div class="stat-lbl">Grabadas</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="st_pend" style="color: var(--text-muted)">0</div>
+        <div class="stat-lbl">Pendientes</div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <span>Estado de las Materias</span>
+    </div>
+    <div class="modules-grid" id="modules_summary"></div>
+
+    <div class="section-title">
+      <span>Clases Detalladas</span>
+    </div>
+    <div class="month-picker" id="picker"></div>
+    <div id="display"></div>
+  </div>
+
+</body>
+</html>
