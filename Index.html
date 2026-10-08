@@ -148,13 +148,12 @@
 
     .stat-val { font-size: 1.2rem; font-weight: 700; }
     .stat-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-
-    .month-picker {
+    
+.month-picker {
       display: flex;
       gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
+      flex-wrap: wrap; /* Acomoda los meses en filas según el espacio */
+      margin-bottom: 16px;
     }
 
     .month-btn {
@@ -245,15 +244,15 @@
 
     window.currentMonth = 'ene';
 
-  window.modulesData = [
-  { id: 'm1', title: '01. Intro a Bases de Datos y SQL', info: '🗓️ 21 OCT 2026 ➔ 18 NOV 2026 | ⏰ Mié y Vie (19:30 - 21:30 hs)', classes: ['c_oct_1', 'c_oct_2', 'c_oct_3', 'c_oct_4', 'c_nov_1', 'c_nov_2', 'c_nov_3', 'c_nov_4', 'c_nov_5'] },
-  { id: 'm2', title: '02. IA y Productividad', info: '🗓️ 25 NOV 2026 ➔ 28 DIC 2026 | ⏰ Lun y Mié (19:30 - 21:30 hs)', classes: ['c_nov_6', 'c_nov_7', 'c_dic_1', 'c_dic_2', 'c_dic_3', 'c_dic_4', 'c_dic_5', 'c_dic_6', 'c_dic_7', 'c_dic_8'] },
-  { id: 'm3', title: '03. SQL Server Programming', info: '🗓️ 29 DIC 2026 ➔ 02 FEB 2027 | ⏰ Mar y Jue (20:00 - 22:00 hs)', classes: ['c_dic_9', 'c_ene_1', 'c_ene_2', 'c_ene_3', 'c_ene_4', 'c_ene_5', 'c_ene_7', 'c_ene_10', 'c_feb_3'] },
-  { id: 'm4', title: '04. Análisis y Diseño SQL', info: '🗓️ 26 ENE 2027 ➔ 23 FEB 2027 | ⏰ Mar y Jue (19:30 - 21:00 hs)', classes: ['c_ene_6', 'c_ene_9', 'c_feb_2', 'c_feb_5', 'c_feb_7', 'c_feb_8'] },
-  { id: 'm5', title: '05. Data Analytics & Visualization', info: '🗓️ 27 ENE 2027 ➔ 01 MAR 2027 | ⏰ Lun y Mié (20:00 - 22:00 hs)', classes: ['c_ene_8', 'c_feb_1', 'c_feb_4', 'c_feb_6'] },
-  { id: 'm6', title: '06. Power BI', info: '🗓️ 08 ABR 2027 ➔ 06 MAY 2027 | ⏰ Lun y Jue (20:00 - 22:00 hs)', classes: ['c_abr_1', 'c_abr_2', 'c_abr_5'] },
-  { id: 'm7', title: '07. Storytelling', info: '🗓️ 20 ABR 2027 ➔ 13 MAY 2027 | ⏰ Mar y Jue (19:30 - 21:00 hs)', classes: ['c_abr_3', 'c_abr_4'] }
-];
+    window.modulesData = [
+      { id: 'm1', title: '01. Intro a Bases de Datos y SQL', info: '🗓️ 21 OCT 2026 ➔ 18 NOV 2026 | ⏰ Mié y Vie (19:30 - 21:30 hs)', classes: ['c_oct_1', 'c_oct_2', 'c_oct_3', 'c_oct_4', 'c_nov_1', 'c_nov_2', 'c_nov_3', 'c_nov_4', 'c_nov_5'] },
+      { id: 'm2', title: '02. IA y Productividad', info: '🗓️ 25 NOV 2026 ➔ 28 DIC 2026 | ⏰ Lun y Mié (19:30 - 21:30 hs)', classes: ['c_nov_6', 'c_nov_7', 'c_dic_1', 'c_dic_2', 'c_dic_3', 'c_dic_4', 'c_dic_5', 'c_dic_6', 'c_dic_7', 'c_dic_8'] },
+      { id: 'm3', title: '03. SQL Server Programming', info: '🗓️ 29 DIC 2026 ➔ 02 FEB 2027 | ⏰ Mar y Jue (20:00 - 22:00 hs)', classes: ['c_dic_9', 'c_ene_1', 'c_ene_2', 'c_ene_3', 'c_ene_4', 'c_ene_5', 'c_ene_7', 'c_ene_10', 'c_feb_3'] },
+      { id: 'm4', title: '04. Análisis y Diseño SQL', info: '🗓️ 26 ENE 2027 ➔ 23 FEB 2027 | ⏰ Mar y Jue (19:30 - 21:00 hs)', classes: ['c_ene_6', 'c_ene_9', 'c_feb_2', 'c_feb_5', 'c_feb_7', 'c_feb_9', 'c_feb_10', 'c_feb_11', 'c_feb_8'] },
+      { id: 'm5', title: '05. Data Analytics & Visualization', info: '🗓️ 27 ENE 2027 ➔ 01 MAR 2027 | ⏰ Lun y Mié (20:00 - 22:00 hs)', classes: ['c_ene_8', 'c_feb_1', 'c_feb_4', 'c_feb_6', 'c_feb_12', 'c_feb_13', 'c_feb_14', 'c_feb_15', 'c_feb_16', 'c_mar_1'] },
+      { id: 'm6', title: '06. Power BI', info: '🗓️ 08 ABR 2027 ➔ 06 MAY 2027 | ⏰ Lun y Jue (20:00 - 22:00 hs)', classes: ['c_abr_1', 'c_abr_2', 'c_abr_6', 'c_abr_7', 'c_abr_5', 'c_abr_8', 'c_abr_9', 'c_may_1', 'c_may_2'] },
+      { id: 'm7', title: '07. Storytelling', info: '🗓️ 20 ABR 2027 ➔ 13 MAY 2027 | ⏰ Mar y Jue (19:30 - 21:00 hs)', classes: ['c_abr_3', 'c_abr_4', 'c_abr_10', 'c_abr_11', 'c_may_3', 'c_may_4', 'c_may_5', 'c_may_6'] }
+    ];
 
     window.classesData = {
       'oct': [
@@ -300,16 +299,41 @@
         { id: 'c_feb_3', title: '03. SQL Programming - Clase 9 (Final)', date: 'Martes 02 Febrero 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Último cruce (20 a 21 hs) con 04. Análisis SQL (19:30 a 21:00 hs)' },
         { id: 'c_feb_4', title: '05. Data Analytics - Clase 3', date: 'Miércoles 03 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
         { id: 'c_feb_5', title: '04. Análisis SQL - Clase 4', date: 'Jueves 04 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
-        { id: 'c_feb_6', title: '05. Data Analytics - Clase 4 (Final)', date: 'Lunes 08 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_6', title: '05. Data Analytics - Clase 4', date: 'Lunes 08 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
         { id: 'c_feb_7', title: '04. Análisis SQL - Clase 5', date: 'Martes 09 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
-        { id: 'c_feb_8', title: '04. Análisis SQL - Clase 6 (Final)', date: 'Martes 23 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false }
+        { id: 'c_feb_12', title: '05. Data Analytics - Clase 5', date: 'Miércoles 10 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_9', title: '04. Análisis SQL - Clase 6', date: 'Jueves 11 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_feb_13', title: '05. Data Analytics - Clase 6', date: 'Lunes 15 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_10', title: '04. Análisis SQL - Clase 7', date: 'Martes 16 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_feb_14', title: '05. Data Analytics - Clase 7', date: 'Miércoles 17 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_11', title: '04. Análisis SQL - Clase 8', date: 'Jueves 18 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_feb_15', title: '05. Data Analytics - Clase 8', date: 'Lunes 22 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_feb_8', title: '04. Análisis SQL - Clase 9 (Final)', date: 'Martes 23 Febrero 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_feb_16', title: '05. Data Analytics - Clase 9', date: 'Miércoles 24 Febrero 2027', time: '20:00 a 22:00 hs', cruce: false }
+      ],
+      'mar': [
+        { id: 'c_mar_1', title: '05. Data Analytics - Clase 10 (Final)', date: 'Lunes 01 Marzo 2027', time: '20:00 a 22:00 hs', cruce: false }
       ],
       'abr': [
         { id: 'c_abr_1', title: '06. Power BI - Clase 1', date: 'Jueves 08 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
         { id: 'c_abr_2', title: '06. Power BI - Clase 2', date: 'Lunes 12 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_abr_6', title: '06. Power BI - Clase 3', date: 'Jueves 15 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_abr_7', title: '06. Power BI - Clase 4', date: 'Lunes 19 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
         { id: 'c_abr_3', title: '07. Storytelling - Clase 1', date: 'Martes 20 Abril 2027', time: '19:30 a 21:00 hs', cruce: false },
-        { id: 'c_abr_4', title: '07. Storytelling - Clase 2 (Final)', date: 'Jueves 22 Abril 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 06. Power BI (20:00 a 22:00 hs)' },
-        { id: 'c_abr_5', title: '06. Power BI - Clase 3 (Final)', date: 'Jueves 22 Abril 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 07. Storytelling (19:30 a 21:00 hs)' }
+        { id: 'c_abr_4', title: '07. Storytelling - Clase 2', date: 'Jueves 22 Abril 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 06. Power BI (20:00 a 22:00 hs)' },
+        { id: 'c_abr_5', title: '06. Power BI - Clase 5', date: 'Jueves 22 Abril 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 07. Storytelling (19:30 a 21:00 hs)' },
+        { id: 'c_abr_8', title: '06. Power BI - Clase 6', date: 'Lunes 26 Abril 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_abr_10', title: '07. Storytelling - Clase 3', date: 'Martes 27 Abril 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_abr_11', title: '07. Storytelling - Clase 4', date: 'Jueves 29 Abril 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 06. Power BI (20:00 a 22:00 hs)' },
+        { id: 'c_abr_9', title: '06. Power BI - Clase 7', date: 'Jueves 29 Abril 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 07. Storytelling (19:30 a 21:00 hs)' }
+      ],
+      'may': [
+        { id: 'c_may_1', title: '06. Power BI - Clase 8', date: 'Lunes 03 Mayo 2027', time: '20:00 a 22:00 hs', cruce: false },
+        { id: 'c_may_3', title: '07. Storytelling - Clase 5', date: 'Martes 04 Mayo 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_may_4', title: '07. Storytelling - Clase 6', date: 'Jueves 06 Mayo 2027', time: '19:30 a 21:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 06. Power BI (20:00 a 22:00 hs)' },
+        { id: 'c_may_2', title: '06. Power BI - Clase 9 (Final)', date: 'Jueves 06 Mayo 2027', time: '20:00 a 22:00 hs', cruce: '⚠️ Cruce (20 a 21 hs) con 07. Storytelling (19:30 a 21:00 hs)' },
+        { id: 'c_may_5', title: '07. Storytelling - Clase 7', date: 'Martes 11 Mayo 2027', time: '19:30 a 21:00 hs', cruce: false },
+        { id: 'c_may_6', title: '07. Storytelling - Clase 8 (Final)', date: 'Jueves 13 Mayo 2027', time: '19:30 a 21:00 hs', cruce: false }
       ]
     };
 
@@ -413,7 +437,9 @@
         { id: 'dic', label: 'Diciembre 2026' },
         { id: 'ene', label: 'Enero 2027' },
         { id: 'feb', label: 'Febrero 2027' },
-        { id: 'abr', label: 'Abril/Mayo 2027' }
+        { id: 'mar', label: 'Marzo 2027' },
+        { id: 'abr', label: 'Abril 2027' },
+        { id: 'may', label: 'Mayo 2027' }
       ];
 
       months.forEach(m => {
